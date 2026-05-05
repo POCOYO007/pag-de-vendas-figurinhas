@@ -9,6 +9,12 @@ import { motion, AnimatePresence } from 'motion/react';
 
 const CHECKOUT_LINK = "https://checkoutkupfy.com/checkout/cmosrxfj300cg1rpfdn8drh19?offer=5XNB0K8";
 
+declare global {
+  interface Window {
+    fbq: any;
+  }
+}
+
 const IMAGES = {
   BENEFICIOS: "https://i.imgur.com/wFvEusW.png",
   CARDS: "https://i.imgur.com/qAPoI0Q.png",
@@ -33,6 +39,17 @@ export default function App() {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleInitiateCheckout = () => {
+    if (typeof window.fbq !== 'undefined') {
+      window.fbq("track", "InitiateCheckout", {
+        content_name: "Renda Extra com Figurinhas da Copa",
+        content_category: "Infoproduto",
+        value: 26.99,
+        currency: "BRL",
+      });
+    }
   };
 
   useEffect(() => {
@@ -120,7 +137,7 @@ export default function App() {
           </div>
 
           <div className="flex flex-col items-center gap-4 mb-12">
-            <a href={CHECKOUT_LINK} className="btn-mega-glow w-full sm:w-auto py-6 px-12 text-2xl md:text-4xl flex items-center justify-center gap-4 uppercase">
+            <a href={CHECKOUT_LINK} onClick={handleInitiateCheckout} className="btn-mega-glow w-full sm:w-auto py-6 px-12 text-2xl md:text-4xl flex items-center justify-center gap-4 uppercase">
               QUERO MEU ACESSO AGORA! <ChevronRight className="w-8 h-8 md:w-12 md:h-12" />
             </a>
             <p className="text-amarelo-ouro font-black text-xs flex items-center gap-2">
@@ -252,7 +269,7 @@ export default function App() {
             <img src={IMAGES.BENEFICIOS} alt="Benefícios do mercado de figurinhas" loading="lazy" decoding="async" />
           </div>
 
-          <a href={CHECKOUT_LINK} className="btn-mega-glow w-full sm:w-auto py-5 px-12 text-2xl">
+          <a href={CHECKOUT_LINK} onClick={handleInitiateCheckout} className="btn-mega-glow w-full sm:w-auto py-5 px-12 text-2xl">
             QUERO ENTRAR ANTES QUE O MERCADO LOTE 🚀
           </a>
         </div>
@@ -321,7 +338,7 @@ export default function App() {
           </div>
         </div>
         <div className="text-center mt-12 reveal-up">
-            <a href={CHECKOUT_LINK} className="btn-mega-glow w-full sm:w-auto py-5 px-10 text-2xl">
+            <a href={CHECKOUT_LINK} onClick={handleInitiateCheckout} className="btn-mega-glow w-full sm:w-auto py-5 px-10 text-2xl">
                 QUERO CONTROLAR MINHA OPERAÇÃO AGORA ⚽
             </a>
         </div>
@@ -426,7 +443,7 @@ export default function App() {
               </p>
           </div>
 
-          <a href={CHECKOUT_LINK} className="btn-mega-glow w-full py-8 text-2xl lg:text-4xl flex items-center justify-center gap-4 italic mb-10">
+          <a href={CHECKOUT_LINK} onClick={handleInitiateCheckout} className="btn-mega-glow w-full py-8 text-2xl lg:text-4xl flex items-center justify-center gap-4 italic mb-10">
             QUERO MEU ACESSO AGORA! <ChevronRight className="w-10 h-10" />
           </a>
 
@@ -457,7 +474,7 @@ export default function App() {
                A demanda cresce a cada minuto e não podemos manter este preço por muito tempo. Garanta sua vaga agora ou pague mais caro depois.
            </p>
 
-           <a href={CHECKOUT_LINK} className="btn-mega-glow w-full bg-black text-white py-6 px-8 text-2xl border-amarelo-ouro shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-4">
+           <a href={CHECKOUT_LINK} onClick={handleInitiateCheckout} className="btn-mega-glow w-full bg-black text-white py-6 px-8 text-2xl border-amarelo-ouro shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-4">
               ENTRAR AGORA — R$ 26,99 🚀
            </a>
         </div>
@@ -492,7 +509,7 @@ export default function App() {
             QUERO SER O <span className="text-amarelo-ouro">VENDEDOR</span>, NÃO SÓ O <span className="text-verde-neon">COLECIONADOR!</span> ⚽
           </h2>
           
-          <a href={CHECKOUT_LINK} className="btn-mega-glow w-full sm:w-auto py-8 px-16 text-2xl md:text-4xl italic shadow-[0_0_60px_rgba(45,254,84,0.4)]">
+          <a href={CHECKOUT_LINK} onClick={handleInitiateCheckout} className="btn-mega-glow w-full sm:w-auto py-8 px-16 text-2xl md:text-4xl italic shadow-[0_0_60px_rgba(45,254,84,0.4)]">
              QUERO APLICAR NA PRÁTICA AGORA! 🚀
           </a>
         </div>
@@ -516,7 +533,7 @@ export default function App() {
   );
 }
 
-function FaqItem({ question, answer }: { question: string; answer: string }) {
+function FaqItem({ question, answer }: { question: string; answer: string; key?: number }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="border-b border-verde-profundo/10 bg-cinza-claro/30 rounded-2xl overflow-hidden hover:bg-cinza-claro/50 transition-all duration-300">
